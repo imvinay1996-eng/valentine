@@ -135,7 +135,6 @@
 
   let yesScale = 1;
 
-  // Resize canvas
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -145,7 +144,6 @@
 
   const confettiInstance = confetti.create(canvas, { resize: true });
 
-  // NO button runs away
   function moveNo() {
     const maxX = zone.clientWidth - noBtn.offsetWidth;
     const maxY = zone.clientHeight - noBtn.offsetHeight;
@@ -166,42 +164,17 @@
     hint.style.display = "none";
     result.style.display = "block";
 
-    // Confetti
     confettiInstance({
       particleCount: 250,
       spread: 140,
       startVelocity: 45
     });
 
-    // GIF links (reliable)
-    const gifs = [
-      "https://giphy.com/gifs/kiss-the-sandlot-9TOe64OPmYxbO"
-    ];
-
-    // Cute messages
-    const messages = [
-      "You just made my heart skip a beat 💓",
-      "Best. Click. Ever. 😍",
-      "Guess we’re Valentines now 😘",
-      "I knew you’d say yes 💕",
-      "This made my day ❤️"
-    ];
-
-    // Clear content
-    result.innerHTML = "<h2>YAY! 🎉</h2>";
-
-    // Random message
-    const msg = document.createElement("p");
-    msg.textContent = messages[Math.floor(Math.random() * messages.length)];
-    msg.style.fontSize = "18px";
-
-    // Random GIF
-    const img = document.createElement("img");
-    img.src = gifs[Math.floor(Math.random() * gifs.length)];
-    img.width = 260;
-
-    result.appendChild(msg);
-    result.appendChild(img);
+    result.innerHTML = `
+      <h2>YAY! 🎉</h2>
+      <p style="font-size:18px">You just made my heart skip a beat 💓</p>
+      <img src="https://media.giphy.com/media/9TOe64OPmYxbO/giphy.gif" width="260">
+    `;
 
     // Floating hearts
     const heartInterval = setInterval(() => {

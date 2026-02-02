@@ -15,6 +15,7 @@
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
   }
 
   main {
@@ -31,7 +32,6 @@
     width: 320px;
     height: 140px;
     margin: 20px auto;
-    border-radius: 12px;
   }
 
   button {
@@ -49,7 +49,6 @@
     color: white;
     border: none;
     border-radius: 6px;
-    transform: scale(1);
   }
 
   #noBtn {
@@ -67,10 +66,38 @@
     margin-top: 20px;
   }
 
+  /* GIF animation */
+  @keyframes fadeZoom {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
   .result img {
-    margin: 10px;
-    width: 260px;
-    border-radius: 12px;
+    animation: fadeZoom 0.8s ease-out;
+    border-radius: 14px;
+    margin-top: 12px;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: floatUp 4s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    to {
+      transform: translateY(-110vh);
+      opacity: 0;
+    }
   }
 
   canvas {
@@ -82,6 +109,7 @@
 </head>
 
 <body>
+
 <canvas id="confettiCanvas"></canvas>
 
 <main>
@@ -94,10 +122,7 @@
 
   <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
-  <section class="result" id="result">
-    <h2>YAY! 🎉</h2>
-    <!-- GIFs will be inserted here dynamically -->
-  </section>
+  <section class="result" id="result"></section>
 </main>
 
 <script>
@@ -110,6 +135,7 @@
 
   let yesScale = 1;
 
+  // Resize canvas
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -124,11 +150,8 @@
     const maxX = zone.clientWidth - noBtn.offsetWidth;
     const maxY = zone.clientHeight - noBtn.offsetHeight;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
 
     yesScale = Math.min(2, yesScale + 0.1);
     yesBtn.style.transform = `scale(${yesScale})`;
@@ -143,28 +166,60 @@
     hint.style.display = "none";
     result.style.display = "block";
 
+    // Confetti
     confettiInstance({
-      particleCount: 300,
-      spread: 120,
-      startVelocity: 50
+      particleCount: 250,
+      spread: 140,
+      startVelocity: 45
     });
 
-    // GIFs array (direct Giphy links)
+    // GIF links (reliable)
     const gifs = [
-      "https://media.giphy.com/media/9TOe64OPmYxbO/giphy.gif"
+      "https://i.imgur.com/7kceK0k.gif",
+      "https://i.imgur.com/QM6QK5X.gif",
+      "https://i.imgur.com/8eQKZpP.gif"
     ];
 
-    // Clear previous GIFs (if any)
+    // Cute messages
+    const messages = [
+      "You just made my heart skip a beat 💓",
+      "Best. Click. Ever. 😍",
+      "Guess we’re Valentines now 😘",
+      "I knew you’d say yes 💕",
+      "This made my day ❤️"
+    ];
+
+    // Clear content
     result.innerHTML = "<h2>YAY! 🎉</h2>";
 
-    // Add 3 random GIFs
-    for (let i = 0; i < 3; i++) {
-      const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-      const img = document.createElement("img");
-      img.src = randomGif;
-      result.appendChild(img);
-    }
+    // Random message
+    const msg = document.createElement("p");
+    msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+    msg.style.fontSize = "18px";
+
+    // Random GIF
+    const img = document.createElement("img");
+    img.src = gifs[Math.floor(Math.random() * gifs.length)];
+    img.width = 260;
+
+    result.appendChild(msg);
+    result.appendChild(img);
+
+    // Floating hearts
+    const heartInterval = setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 18 + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 4000);
+    }, 300);
+
+    setTimeout(() => clearInterval(heartInterval), 4000);
   });
 </script>
+
 </body>
 </html>
